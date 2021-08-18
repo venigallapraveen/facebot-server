@@ -28,7 +28,6 @@ var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 }
-and apply via
 
 app.configure(function() {
     app.use(allowCrossDomain);
