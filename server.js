@@ -20,7 +20,21 @@ const db = knex({
 
 const app = express();
 
-app.use(cors({origin: '*'}));
+app.use(cors());
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'https://praveen-facebot.herokuapp.com');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Pass to next layer of middleware
+    next();
+});
 app.use(bodyParser.json());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
