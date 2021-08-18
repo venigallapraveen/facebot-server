@@ -1,9 +1,8 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
-
+const helmet = require("helmet");
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
@@ -15,34 +14,15 @@ const port = process.env.PORT || 3000;
 const db = knex({
   client: "pg",
   connection: process.env.DATABASE_URL,
-  ssl: true
+  ssl: true,
 });
 
 const app = express();
 
 app.use(cors());
-
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-}
-
-app.configure(function() {
-    app.use(allowCrossDomain);
-    //some other code
-});  
-
-app.use(bodyParser.json());
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-    parameterLimit: 50000
-  })
-);
+app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.post("/signin", signin.signinAuthentication(db, bcrypt));
 app.post("/register", (req, res) => {
