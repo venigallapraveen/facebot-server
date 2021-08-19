@@ -1,9 +1,9 @@
 const express = require("express");
-const register = require("./controllers/register");
-const signin = require("./controllers/signin");
-const profile = require("./controllers/profile");
-const image = require("./controllers/image");
-const auth = require("./controllers/authorization");
+const register = require("../controllers/register");
+const signin = require("../controllers/signin");
+const profile = require("../controllers/profile");
+const image = require("../controllers/image");
+const auth = require("../controllers/authorization");
 const bcrypt = require("bcrypt-nodejs");
 const knex = require("knex");
 
