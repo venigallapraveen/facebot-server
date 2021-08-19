@@ -1,45 +1,23 @@
 const express = require("express");
-const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
-const knex = require("knex");
 const helmet = require("helmet");
-const register = require("./controllers/register");
-const signin = require("./controllers/signin");
-const profile = require("./controllers/profile");
-const image = require("./controllers/image");
-const auth = require("./controllers/authorization");
-const port = process.env.PORT || 3000;
 
-//Database Setup
-const db = knex({
-  client: "pg",
-  connection: process.env.DATABASE_URL,
-  ssl: true,
-});
+const router = require("./router/index");
+
+const port = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://praveen-facebot.herokuapp.com",
+  })
+);
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/signin", signin.signinAuthentication(db, bcrypt));
-app.post("/register", (req, res) => {
-  register.handleRegister(req, res, db, bcrypt);
-});
-app.get("/profile/:id", auth.requireAuth, (req, res) => {
-  profile.handleProfileGet(req, res, db);
-});
-app.post("/profile/:id", auth.requireAuth, (req, res) => {
-  profile.handleProfileUpdate(req, res, db);
-});
-app.put("/image", auth.requireAuth, (req, res) => {
-  image.handleImage(req, res, db);
-});
-app.post("/imageurl", auth.requireAuth, (req, res) => {
-  image.handleApiCall(req, res);
-});
+app.use("/", router);
 
 app.listen(port, () => {
   console.log("app is running on port " + port);
