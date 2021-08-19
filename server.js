@@ -8,11 +8,12 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "https://praveen-facebot.herokuapp.com",
-  })
-);
+var corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
